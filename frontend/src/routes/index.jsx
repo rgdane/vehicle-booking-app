@@ -18,8 +18,8 @@ export const router = createBrowserRouter([
         element: isAuthenticated() ? <DashboardLayout /> : <Navigate to="/login" />,
         children: [
         { path: "", element: <Dashboard /> },
-        { path: "bookings", element: <Booking /> },
-        { path: "approvals", element: <Approval /> },
+        { path: "booking", element: <Booking /> },
+        { path: "approval", element: <Approval /> },
         ],
     },
 ]);

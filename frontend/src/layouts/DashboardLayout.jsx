@@ -1,23 +1,43 @@
-import { Outlet, Link } from "react-router-dom";
+import { Outlet, useLocation } from "react-router-dom";
+import Header from "./Header";
+import Sidebar from "./Sidebar";
+import { Layout, theme } from "antd"; // jangan lupa import Layout & Footer
+import React, { useState } from "react";
+
+const { Content, Footer } = Layout;
 
 export default function DashboardLayout() {
-    return (
-        <div className="flex">
-        <nav className="w-1/5 bg-gray-800 text-white min-h-screen p-4">
-            <h2 className="text-lg font-bold mb-4">Vehicle Dashboard</h2>
-            <ul className="space-y-2">
-            <li><Link to="/">Home</Link></li>
-            <li><Link to="/bookings">Bookings</Link></li>
-            <li><Link to="/approvals">Approvals</Link></li>
-            <li><button onClick={() => {
-                localStorage.removeItem("auth");
-                window.location.href = "/login";
-            }}>Logout</button></li>
-            </ul>
-        </nav>
-        <main className="flex-1 p-6 bg-gray-100">
-            <Outlet />
-        </main>
-        </div>
-    );
+    const [collapsed, setCollapsed] = useState(false);
+
+    function AppContent() {
+        const location = useLocation();
+        const {
+            token: { colorBgContainer },
+        } = theme.useToken();
+
+        const titles = {
+            '/': 'Dashboard',
+            '/booking': 'Daftar Pemesanan',
+            '/approval': 'Daftar Persetujuan',
+        };
+
+        const currentTitle = titles[location.pathname] || 'Dashboard';
+
+        return (
+            <Layout>
+                <Sidebar collapsed={collapsed} />
+                <Layout>
+                    <Header collapsed={collapsed} setCollapsed={setCollapsed} title={currentTitle} />
+                    <Content style={{ margin: '24px 16px', padding: 24, background: colorBgContainer }}>
+                        <Outlet />
+                    </Content>
+                    <Footer style={{ textAlign: 'center' }}>
+                        Aplikasi Pemesanan Kendaraan ©{new Date().getFullYear()} Created by Dane
+                    </Footer>
+                </Layout>
+            </Layout>
+        );
+    }
+
+    return <AppContent />;
 }

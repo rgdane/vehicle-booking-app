@@ -31,7 +31,7 @@ class User extends Authenticatable
      * @var array<int, string>
      */
     protected $hidden = [
-        'password',
+        'user_password',
         'remember_token',
     ];
 
@@ -44,4 +44,9 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'user_password' => 'hashed',
     ];
+
+    public function getAuthPassword()
+    {
+        return $this->user_password;
+    }
 }

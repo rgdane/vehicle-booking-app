@@ -32,6 +32,8 @@ Route::middleware(['auth:sanctum'])->get('/user', function (Request $request) {
     Route::get('/approvals/level/{level}', [ApprovalController::class, 'indexByLevel']);
     Route::get('/vehicle-usage/{year}', [DashboardController::class, 'vehicleUsage']);
     Route::get('/years', [DashboardController::class, 'getYear']);
+    Route::get('/export', [BookingController::class, 'export']);
+
 
 
 

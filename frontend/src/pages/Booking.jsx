@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Table, Button, Space, message, Popconfirm, Input } from 'antd';
-import { PlusOutlined } from '@ant-design/icons';
+import { FileExcelOutlined, PlusOutlined } from '@ant-design/icons';
 import api from '../lib/axios';
 import AddBookingModal from '../modals/AddBookingModal';
 import EditBookingModal from '../modals/EditBookingModal';
@@ -84,6 +84,32 @@ export default function Booking() {
         }
     };
 
+    const handleExport = async () => {
+        try {
+            const response = await api.get('/api/export', {
+                responseType: 'blob',
+            });
+        
+            const today = new Date();
+            const pad = (n) => n.toString().padStart(2, '0');
+            const formattedDate = `${today.getFullYear()}-${pad(today.getMonth() + 1)}-${pad(today.getDate())}`;
+
+            // Bisa tambahkan nomor unik (misal waktu detik) biar beda tiap klik
+            const unique = Date.now().toString().slice(-4); // ambil 4 digit terakhir waktu sekarang
+
+            const filename = `booking_${formattedDate}_${unique}.xlsx`;
+
+            const url = window.URL.createObjectURL(new Blob([response.data]));
+            const link = document.createElement('a');
+            link.href = url;
+            link.setAttribute('download', filename);
+            document.body.appendChild(link);
+            link.click();
+            } catch (error) {
+            console.error('Gagal export:', error);
+        }
+    };
+
     const columns = [
         {
             title: 'No',
@@ -150,9 +176,14 @@ export default function Booking() {
         <div>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
             <h1>Daftar Pemesanan Kendaraan</h1>
+            <div style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', gap: 8 }}>
+            <Button color="cyan" variant="solid" icon={<FileExcelOutlined />} onClick={() => handleExport()}>
+                Export ke Excel
+            </Button>
             <Button type="primary" icon={<PlusOutlined />} onClick={() => setIsModalOpen(true)}>
             Tambah Pemesanan
             </Button>
+            </div>
         </div>
         <Input.Search
             placeholder="Cari..."

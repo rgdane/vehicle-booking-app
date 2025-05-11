@@ -25,7 +25,7 @@ export default function Dashboard() {
     
     const fetchVehicleUsage = async (year) => {
         try {
-            const response = await api.get(`/api/vehicle-usage/${year}`) // Ganti sesuai endpoint kamu
+            const response = await api.get(`/api/vehicle-usage/${year}`)
             const formattedData = formatDataForChart(response.data);
             setData(formattedData);
         } catch (error) {
@@ -34,16 +34,16 @@ export default function Dashboard() {
     }
 
     useEffect(() => {
-        fetchYears(); // hanya sekali saat komponen pertama kali mount
+        fetchYears();
     }, []);
     
     useEffect(() => {
-        fetchVehicleUsage(selectedYear); // hanya dipanggil saat selectedYear berubah
+        fetchVehicleUsage(selectedYear);
     }, [selectedYear]);
     
     // Format data untuk menyesuaikan dengan format yang diperlukan oleh grafik
     const formatDataForChart = (usageData) => {
-        const allMonths = Array.from({ length: 12 }, (_, i) => i + 1); // [1, 2, ..., 12]
+        const allMonths = Array.from({ length: 12 }, (_, i) => i + 1);
     
         return allMonths.map(monthNum => {
             const found = usageData.find(item => Number(item.month) === monthNum);

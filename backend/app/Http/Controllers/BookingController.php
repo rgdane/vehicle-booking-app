@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\BookingExport;
 use App\Models\Booking;
 use Illuminate\Http\Request;
+use Maatwebsite\Excel\Facades\Excel;
 
 class BookingController extends Controller
 {
@@ -81,5 +83,10 @@ class BookingController extends Controller
         $booking = Booking::findOrFail($id);
         $booking->delete(); // soft delete
         return response()->json(['message' => 'Booking Deleted successfully.']);
+    }
+
+    public function export()
+    {
+        return Excel::download(new BookingExport, 'data-booking.xlsx');
     }
 }

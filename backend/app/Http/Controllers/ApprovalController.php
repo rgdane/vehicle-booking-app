@@ -21,6 +21,7 @@ class ApprovalController extends Controller
         $approval = Approval::with('user', 'booking.user', 'booking.driver', 'booking.vehicle')
         ->where('approval_level', $level)
         ->where('approval_status', 0)
+        ->whereNull('deleted_at')
         ->latest()
         ->get();
 

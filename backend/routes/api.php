@@ -38,18 +38,20 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 //     return response()->json(['message' => 'Logout berhasil']);
 // });
 
-Route::middleware('auth:sanctum')->group(function () {
-    Route::apiResource('vehicles', VehicleController::class);
-    Route::apiResource('drivers', DriverController::class);
-    Route::apiResource('bookings', BookingController::class);
-    Route::apiResource('approvals', ApprovalController::class);
-    Route::get('/approvals/level/{level}', [ApprovalController::class, 'indexByLevel']);
-    Route::get('/vehicle-usage/{year}', [DashboardController::class, 'vehicleUsage']);
-    Route::get('/years', [DashboardController::class, 'getYear']);
-    Route::get('/export', [BookingController::class, 'export']);
-    Route::get('/bookings', [BookingController::class, 'indexByFilter']);
-});
-
+    Route::middleware(['auth:sanctum', 'role:admin,direktur_pusat,direktur_cabang'])->group(function () {
+        Route::apiResource('vehicles', VehicleController::class);
+        Route::apiResource('drivers', DriverController::class);
+        Route::apiResource('bookings', BookingController::class);
+        Route::post('/approvals', [ApprovalController::class, 'store']);
+        Route::get('/vehicle-usage/{year}', [DashboardController::class, 'vehicleUsage']);
+        Route::get('/years', [DashboardController::class, 'getYear']);
+        Route::get('/export', [BookingController::class, 'export']);
+        Route::get('/bookings', [BookingController::class, 'indexByFilter']);
+    });
+    Route::middleware(['auth:sanctum', 'role:direktur_pusat,direktur_cabang'])->group(function () {
+        Route::apiResource('approvals', ApprovalController::class);
+        Route::get('/approvals/level/{level}', [ApprovalController::class, 'indexByLevel']);
+    });
 
 
 

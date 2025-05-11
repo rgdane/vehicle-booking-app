@@ -1,3 +1,179 @@
+import React, { useState, useEffect } from 'react';
+import { Table, Button, Space, message, Popconfirm, Input } from 'antd';
+import { PlusOutlined } from '@ant-design/icons';
+import api from '../lib/axios';
+import AddBookingModal from '../modals/AddBookingModal';
+import EditBookingModal from '../modals/EditBookingModal';
+//import getCSRF from '../lib/csrf';
+
 export default function Booking() {
-    return <h1>Daftar Pemesanan Kendaraan</h1>;
+    const [data, setData] = useState([]); // state untuk data booking
+    const [loading, setLoading] = useState(false); // loading table
+    const [isModalOpen, setIsModalOpen] = useState(false); // modal tambah booking
+    const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+    const [editingData, setEditingData] = useState(null);
+    const [searchText, setSearchText] = useState('');
+    
+    const filteredData = data.filter((item) =>
+        (item.user?.user_fullname || '').toLowerCase().includes(searchText.toLowerCase()) ||
+        (item.vehicle?.vehicle_plate || '').toLowerCase().includes(searchText.toLowerCase()) ||
+        (item.driver?.driver_name || '').toLowerCase().includes(searchText.toLowerCase())
+    );
+
+    const fetchBooking = async () => {
+        setLoading(true);
+        try {
+        const response = await api.get('/api/bookings', {
+            //withCredentials: true
+        });
+        setData(response.data); // Sesuaikan response sesuai API kamu
+        } catch (error) {
+        console.error('Gagal fetch booking:', error);
+        }
+        setLoading(false);
+    };
+
+    useEffect(() => {
+        const init = async () => {
+          //await getCSRF(); // pastikan cookie auth diset dulu
+            console.log(document.cookie)
+            fetchBooking();
+        };
+        init();
+    }, []);
+
+    const handleDelete = async (id) => {
+        try {
+            await api.delete(`/api/bookings/${id}`);
+            message.success('Booking berhasil dihapus');
+          fetchBooking(); // refresh tabel
+        } catch (error) {
+            console.error('Gagal hapus booking:', error);
+            message.error('Gagal hapus booking');
+        }
+    };
+
+    const openEditModal = (record) => {
+        setEditingData(record);
+        setIsEditModalOpen(true);
+    };
+
+    // ...fungsi handle update
+    const handleUpdateBooking = async (values) => {
+        try {
+        const formData = new FormData();
+        formData.append('user_id', 1);
+        formData.append('vehicle_id', values.vehicle_id);
+        formData.append('driver_id', values.driver_id);
+        formData.append('booking_purpose', values.booking_purpose);
+        formData.append('booking_start_date', values.booking_start_date.format('YYYY-MM-DD'));
+        formData.append('booking_end_date', values.booking_end_date.format('YYYY-MM-DD'));
+    
+        await api.post(`/api/bookings/${editingData.booking_id}?_method=PUT`, formData, {
+            headers: {
+            'Content-Type': 'multipart/form-data',
+            },
+        });
+    
+        message.success('Berhasil memperbarui booking!');
+        setIsEditModalOpen(false);
+        fetchBooking(); // refresh tabel
+        } catch (error) {
+        console.error('Gagal update booking:', error);
+        message.error('Gagal update booking!');
+        }
+    };
+
+    const columns = [
+        {
+            title: 'No',
+            dataIndex: 'index',
+            key: 'index',
+            render: (text, record, index) => index + 1,
+        },
+        {
+            title: 'Nama Pemohon',
+            dataIndex: ['user','user_fullname'],
+            key: 'user_fullname',
+        },
+        {
+            title: 'Plat Nomor',
+            dataIndex: ['vehicle','vehicle_plate'],
+            key: 'vehicle_plate',
+        },
+        {
+            title: 'Nama Pengemudi',
+            dataIndex: ['driver','driver_name'],
+            key: 'driver_name',
+        },
+        {
+            title: 'Keperluan',
+            dataIndex: 'booking_purpose',
+            key: 'booking_purpose',
+        },
+        {
+            title: 'Tanggal Mulai',
+            dataIndex: 'booking_start_date',
+            key: 'booking_start_date',
+        },
+        {
+            title: 'Tanggal Selesai',
+            dataIndex: 'booking_end_date',
+            key: 'booking_end_date',
+        },
+        {
+            title: 'Status',
+            dataIndex: 'booking_status',
+            key: 'booking_status',
+        },
+        {
+            title: 'Aksi',
+            key: 'aksi',
+            render: (_, record) => (
+                <Space size="middle">
+                    <Button type="primary" onClick={() => openEditModal(record)}>Ubah</Button>
+                    <Popconfirm
+                        title="Yakin ingin hapus booking ini?"
+                        description="Data yang dihapus tidak bisa dikembalikan."
+                        okText="Ya, hapus"
+                        cancelText="Batal"
+                        onConfirm={() => handleDelete(record.booking_id)}
+                    >
+                    <Button danger>Hapus</Button>
+                    </Popconfirm>
+                </Space>
+            ),
+        },
+    ];
+    
+    return (
+        <div>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
+            <h1>Daftar Pemesanan Kendaraan</h1>
+            <Button type="primary" icon={<PlusOutlined />} onClick={() => setIsModalOpen(true)}>
+            Tambah Pemesanan
+            </Button>
+        </div>
+        <Input.Search
+            placeholder="Cari..."
+            onChange={(e) => setSearchText(e.target.value)}
+            style={{ marginBottom: 16 }}
+        />
+        <Table columns={columns} dataSource={filteredData} loading={loading} rowKey="booking_id" pagination={{ pageSize: 5 }} />
+
+        <AddBookingModal
+            isModalOpen={isModalOpen}
+            setIsModalOpen={setIsModalOpen}
+            fetchBooking={fetchBooking}
+        />
+
+        <EditBookingModal
+            isModalOpen={isEditModalOpen}
+            handleCancel={() => setIsEditModalOpen(false)}
+            editingData={editingData}
+            handleUpdate={handleUpdateBooking}
+        />
+
+        </div>
+    );
 }

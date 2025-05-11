@@ -18,4 +18,8 @@ class Driver extends Model
         'driver_name',
         'driver_phone',
     ];
+
+    public function bookings() {
+        return $this->hasMany(Booking::class);
+    }
 }

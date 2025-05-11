@@ -20,7 +20,7 @@ class Vehicle extends Model
         'vehicle_ownership'
     ];
 
-    // public function bookings() {
-    //     return $this->hasMany(Bookings::class);
-    // }
+    public function bookings() {
+        return $this->hasMany(Booking::class);
+    }
 }

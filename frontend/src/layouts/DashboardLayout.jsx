@@ -19,6 +19,7 @@ export default function DashboardLayout() {
             '/': 'Dashboard',
             '/booking': 'Daftar Pemesanan',
             '/approval': 'Daftar Persetujuan',
+            '/driver': 'Daftar Pengemudi',
         };
 
         const currentTitle = titles[location.pathname] || 'Dashboard';

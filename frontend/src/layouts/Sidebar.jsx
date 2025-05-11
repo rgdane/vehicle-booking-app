@@ -42,6 +42,9 @@ export default function Sidebar({ collapsed }) {
         <Menu.Item key="/approval" icon={<AuditOutlined />}>
           <Link to="/approval">Daftar Persetujuan</Link>
         </Menu.Item>
+        <Menu.Item key="/driver" icon={<AuditOutlined />}>
+          <Link to="/driver">Daftar Pengemudi</Link>
+        </Menu.Item>
       </Menu>
     </Sider>
   );

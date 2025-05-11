@@ -15,9 +15,9 @@ export default function FirstApproval() {
     const [selectedApproval, setSelectedApproval] = useState(null);
     
     const filteredData = data.filter((item) =>
-        (item.user?.user_fullname || '').toLowerCase().includes(searchText.toLowerCase()) ||
-        (item.vehicle?.vehicle_plate || '').toLowerCase().includes(searchText.toLowerCase()) ||
-        (item.driver?.driver_name || '').toLowerCase().includes(searchText.toLowerCase())
+        (item.booking?.user?.user_fullname || '').toLowerCase().includes(searchText.toLowerCase()) ||
+        (item.booking?.vehicle?.vehicle_plate || '').toLowerCase().includes(searchText.toLowerCase()) ||
+        (item.booking?.driver?.driver_name || '').toLowerCase().includes(searchText.toLowerCase())
     );
 
     const fetchApproval = async (level) => {

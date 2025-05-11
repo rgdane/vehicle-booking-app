@@ -7,7 +7,7 @@ import Approval from "../pages/Approval";
 import Driver from "../pages/Driver";
 
 // Simulasi autentikasi
-const isAuthenticated = () => !!localStorage.getItem("auth");
+// const isAuthenticated = () => !!localStorage.getItem("auth");
 
 export const router = createBrowserRouter([
     {
@@ -16,7 +16,8 @@ export const router = createBrowserRouter([
     },
     {
         path: "/",
-        element: isAuthenticated() ? <DashboardLayout /> : <Navigate to="/login" />,
+        //element: isAuthenticated() ? <DashboardLayout /> : <Navigate to="/login" />,
+        element: <DashboardLayout />,
         children: [
         { path: "", element: <Dashboard /> },
         { path: "booking", element: <Booking /> },

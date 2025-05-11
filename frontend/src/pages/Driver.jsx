@@ -3,8 +3,8 @@ import { Table, Button, Space, message, Popconfirm, Input } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 import api from '../lib/axios';
 import AddDriverModal from '../modals/AddDriverModal';
-import getCSRF from '../lib/csrf';
-//import ModalUbahDriver from '../modals/ModalUbahDriver';
+import EditDriverModal from '../modals/EditDriverModal';
+//import getCSRF from '../lib/csrf';
 
 export default function Driver() {
     const [data, setData] = useState([]); // state untuk data driver
@@ -15,14 +15,15 @@ export default function Driver() {
     const [searchText, setSearchText] = useState('');
     
     const filteredData = data.filter((item) =>
-        (item.house_address || '').toLowerCase().includes(searchText.toLowerCase())
+        (item.driver_name || '').toLowerCase().includes(searchText.toLowerCase()) ||
+        (item.driver_phone || '').toLowerCase().includes(searchText.toLowerCase())
     );
 
     const fetchDriver = async () => {
         setLoading(true);
         try {
         const response = await api.get('/api/drivers', {
-            withCredentials: true
+            //withCredentials: true
         });
         setData(response.data); // Sesuaikan response sesuai API kamu
         } catch (error) {
@@ -33,7 +34,7 @@ export default function Driver() {
 
     useEffect(() => {
         const init = async () => {
-          await getCSRF(); // pastikan cookie auth diset dulu
+          //await getCSRF(); // pastikan cookie auth diset dulu
             console.log(document.cookie)
             fetchDriver();
         };
@@ -60,10 +61,10 @@ export default function Driver() {
     const handleUpdateDriver = async (values) => {
         try {
         const formData = new FormData();
-        formData.append('house_address', values.house_address);
-        formData.append('is_occupied', values.is_occupied ? 1 : 0);
+        formData.append('driver_name', values.driver_name);
+        formData.append('driver_phone', values.driver_phone);
     
-        await api.post(`/api/houses/${editingData.driver_id}?_method=PUT`, formData, {
+        await api.post(`/api/drivers/${editingData.driver_id}?_method=PUT`, formData, {
             headers: {
             'Content-Type': 'multipart/form-data',
             },
@@ -92,7 +93,7 @@ export default function Driver() {
         },
         {
             title: 'Telepon',
-            dataIndex: 'driver_phone', // sesuai field API kamu
+            dataIndex: 'driver_phone',
             key: 'driver_phone',
         },
         {
@@ -106,7 +107,7 @@ export default function Driver() {
                         description="Data yang dihapus tidak bisa dikembalikan."
                         okText="Ya, hapus"
                         cancelText="Batal"
-                        onConfirm={() => handleDelete(record.house_id)}
+                        onConfirm={() => handleDelete(record.driver_id)}
                     >
                     <Button danger>Hapus</Button>
                     </Popconfirm>
@@ -136,12 +137,12 @@ export default function Driver() {
             fetchDriver={fetchDriver}
         />
 
-        {/* <ModalUbahDriver
+        <EditDriverModal
             isModalOpen={isEditModalOpen}
             handleCancel={() => setIsEditModalOpen(false)}
             editingData={editingData}
             handleUpdate={handleUpdateDriver}
-        /> */}
+        />
 
         </div>
     );

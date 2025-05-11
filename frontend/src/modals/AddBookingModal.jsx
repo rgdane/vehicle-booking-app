@@ -44,7 +44,7 @@ export default function AddBookingModal({ isModalOpen, setIsModalOpen, fetchBook
         formData.append('booking_purpose', values.booking_purpose);
         formData.append('booking_start_date', values.booking_start_date.format('YYYY-MM-DD'));
         formData.append('booking_end_date', values.booking_end_date.format('YYYY-MM-DD'));
-        formData.append('booking_status', 'Menunggu persetujuan');
+        formData.append('booking_status', 'Menunggu persetujuan cabang');
 
         const formApproval = new FormData();
         formApproval.append('approval_level', 1);

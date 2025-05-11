@@ -6,6 +6,7 @@ import Booking from "../pages/Booking";
 import Driver from "../pages/Driver";
 import Vehicle from "../pages/Vehicle";
 import FirstApproval from "../pages/FirstApproval";
+import SecondApproval from "../pages/SecondApproval";
 
 // Simulasi autentikasi
 // const isAuthenticated = () => !!localStorage.getItem("auth");
@@ -23,6 +24,7 @@ export const router = createBrowserRouter([
         { path: "", element: <Dashboard /> },
         { path: "booking", element: <Booking /> },
         { path: "first-approval", element: <FirstApproval /> },
+        { path: "second-approval", element: <SecondApproval /> },
         { path: "driver", element: <Driver /> },
         { path: "vehicle", element: <Vehicle /> },
         ],

@@ -5,7 +5,7 @@ import api from '../lib/axios';
 import dayjs from 'dayjs';
 //import getCSRF from '../lib/csrf';
 
-export default function FirstApproval() {
+export default function SecondApproval() {
     const [data, setData] = useState([]); // state untuk data booking
     const [loading, setLoading] = useState(false); // loading table
     const [searchText, setSearchText] = useState('');
@@ -37,7 +37,7 @@ export default function FirstApproval() {
         const init = async () => {
           //await getCSRF(); // pastikan cookie auth diset dulu
             console.log(document.cookie)
-            fetchApproval(1);
+            fetchApproval(2);
         };
         init();
     }, []);
@@ -55,18 +55,13 @@ export default function FirstApproval() {
         await api.put(`/api/approvals/${record.approval_id}`, {
             approval_status: 2,
             approved_at: approvedAt,
-            user_id: 5
+            user_id: 6
         });
 
         await api.put(`/api/bookings/${record.booking_id}`, {
-            booking_status: 'Menunggu persetujuan pusat',
+            booking_status: 'Disetujui',
         });
         
-        await api.post('/api/approvals', {
-            approval_level: 2,
-            approval_status: 0,
-            booking_id: record.booking_id
-        });
         fetchApproval(); // Refresh data
     };
 
@@ -78,7 +73,7 @@ export default function FirstApproval() {
             approval_status: 1,
             approval_notes: approvalNotes,
             approved_at: approvedAt,
-            user_id: 5
+            user_id: 6
         });
 
         await api.put(`/api/bookings/${selectedApproval.booking_id}`, {

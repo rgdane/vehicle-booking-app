@@ -36,7 +36,7 @@ class ApprovalController extends Controller
             'booking_id' => 'required|exists:bookings,booking_id',
             'approval_level' => 'required|integer',
             'approval_status' => 'nullable|integer',
-            'approval_notes' => 'nullable|text',
+            'approval_notes' => 'nullable|string',
         ]);
 
         $approval = Approval::create($data);
@@ -66,7 +66,7 @@ class ApprovalController extends Controller
         $data = $request->validate([
             'user_id' => 'required|exists:users,user_id',
             'approval_status' => 'required|integer',
-            'approval_notes' => 'nullable|text',
+            'approval_notes' => 'nullable|string',
             'approved_at' => 'required|date',
         ]);
 

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Table, Button, Space, message, Popconfirm, Input } from 'antd';
+import { Table, Button, Space, message, Popconfirm, Input, Select } from 'antd';
 import { FileExcelOutlined, PlusOutlined } from '@ant-design/icons';
 import api from '../lib/axios';
 import AddBookingModal from '../modals/AddBookingModal';
@@ -13,6 +13,10 @@ export default function Booking() {
     const [isEditModalOpen, setIsEditModalOpen] = useState(false);
     const [editingData, setEditingData] = useState(null);
     const [searchText, setSearchText] = useState('');
+    const [yearsData, setYearsData] = useState([]);
+    const [monthsData, setMonthsData] = useState([]);
+    const [selectedYear, setSelectedYear] = useState([]);
+    const [selectedMonth, setSelectedMonth] = useState([]);
     
     const filteredData = data.filter((item) =>
         (item.user?.user_fullname || '').toLowerCase().includes(searchText.toLowerCase()) ||
@@ -20,27 +24,55 @@ export default function Booking() {
         (item.driver?.driver_name || '').toLowerCase().includes(searchText.toLowerCase())
     );
 
-    const fetchBooking = async () => {
+    const fetchYears = async () => {
+        try {
+            const response = await api.get('/api/years');
+            
+            const yearsData = response.data;
+                
+            setYearsData(yearsData);
+    
+        } catch (error) {
+            console.error('Gagal ambil data tahun:', error);
+            setYearsData([]);
+        }
+    }
+
+    const fetchBooking = async (year = selectedYear, month = selectedMonth) => {
         setLoading(true);
         try {
-        const response = await api.get('/api/bookings', {
-            //withCredentials: true
-        });
-        setData(response.data); // Sesuaikan response sesuai API kamu
+            const response = await api.get('/api/bookings', {
+                params: {
+                    year: year,
+                    month: month,
+                },
+            });
+            setData(response.data);
         } catch (error) {
-        console.error('Gagal fetch booking:', error);
+            console.error('Gagal fetch booking:', error);
         }
         setLoading(false);
     };
 
     useEffect(() => {
+        fetchBooking(selectedYear, selectedMonth);
+    }, [selectedYear, selectedMonth]);
+
+    useEffect(() => {
         const init = async () => {
           //await getCSRF(); // pastikan cookie auth diset dulu
-            console.log(document.cookie)
-            fetchBooking();
+            //console.log(document.cookie)
+            fetchYears();
         };
         init();
     }, []);
+
+    useEffect(() => {
+        const months = Array.from({ length: 12 }, (_, i) => i + 1);
+        console.log(months);
+        setMonthsData(months);
+    }, []);
+    
 
     const handleDelete = async (id) => {
         try {
@@ -84,9 +116,13 @@ export default function Booking() {
         }
     };
 
-    const handleExport = async () => {
+    const handleExport = async (year, month) => {
         try {
             const response = await api.get('/api/export', {
+                params: {
+                    year: year ?? undefined,
+                    month: month ?? undefined,
+                },
                 responseType: 'blob',
             });
         
@@ -177,12 +213,40 @@ export default function Booking() {
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
             <h1>Daftar Pemesanan Kendaraan</h1>
             <div style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', gap: 8 }}>
-            <Button color="cyan" variant="solid" icon={<FileExcelOutlined />} onClick={() => handleExport()}>
-                Export ke Excel
-            </Button>
-            <Button type="primary" icon={<PlusOutlined />} onClick={() => setIsModalOpen(true)}>
-            Tambah Pemesanan
-            </Button>
+                <span style={{ fontWeight: 500 }}>Tahun:</span>
+                <Select
+                    allowClear
+                    placeholder="Pilih Tahun"
+                    value={selectedYear}
+                    onChange={(value) => setSelectedYear(value)}
+                    style={{ width: 120 }}
+                >
+                    {yearsData.map((year) => (
+                        <Select.Option key={year} value={year}>
+                            {year}
+                        </Select.Option>
+                    ))}
+                </Select>
+                <span style={{ fontWeight: 500 }}>Bulan:</span>
+                <Select
+                    allowClear
+                    placeholder="Pilih Bulan"
+                    value={selectedMonth}
+                    onChange={(value) => setSelectedMonth(value)}
+                    style={{ width: 120 }}
+                >
+                    {monthsData.map((month) => (
+                        <Select.Option key={month} value={month}>
+                            {month}
+                        </Select.Option>
+                    ))}
+                </Select>
+                <Button color="cyan" variant="solid" icon={<FileExcelOutlined />} onClick={() => handleExport(selectedYear, selectedMonth)}>
+                    Export ke Excel
+                </Button>
+                <Button type="primary" icon={<PlusOutlined />} onClick={() => setIsModalOpen(true)}>
+                Tambah Pemesanan
+                </Button>
             </div>
         </div>
         <Input.Search

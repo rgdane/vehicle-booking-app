@@ -14,8 +14,29 @@ class BookingController extends Controller
      */
     public function index()
     {
-        $bookings = Booking::with('user', 'driver', 'vehicle')->latest()->get();
+        $bookings = Booking::with('user', 'driver', 'vehicle')
+        ->whereNull('deleted_at')
+        ->latest()
+        ->get();
         return response()->json($bookings);
+    }
+    
+    public function indexByFilter(Request $request)
+    {
+        $year = $request->get('year');
+        $month = $request->get('month');
+        
+        $bookings = Booking::with('user', 'driver', 'vehicle')
+            ->whereNull('deleted_at')
+            ->latest();
+        if ($year) {
+            $bookings->whereYear('booking_start_date', $year);
+        }
+    
+        if ($month) {
+            $bookings->whereMonth('booking_start_date', $month);
+        }
+        return response()->json($bookings->get());
     }
 
     /**
@@ -85,8 +106,10 @@ class BookingController extends Controller
         return response()->json(['message' => 'Booking Deleted successfully.']);
     }
 
-    public function export()
+    public function export(Request $request)
     {
-        return Excel::download(new BookingExport, 'data-booking.xlsx');
+        $year = $request->get('year');
+        $month = $request->get('month');
+        return Excel::download(new BookingExport($year, $month), 'data-booking.xlsx');
     }
 }

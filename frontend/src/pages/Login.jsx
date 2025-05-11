@@ -1,8 +1,10 @@
 import React from 'react';
-import { Button, Checkbox, Form, Input, message } from 'antd';
+import { Button, Checkbox, Form, Input, message, Card, Typography } from 'antd';
 import api from '../lib/axios';
 import getCSRF from '../lib/csrf';
 import { useNavigate } from 'react-router-dom';
+
+const { Title } = Typography;
 
 const Login = () => {
     const navigate = useNavigate();
@@ -20,7 +22,6 @@ const Login = () => {
             messageApi.success('Login berhasil');
             localStorage.setItem('auth', true);
             navigate('/');
-
         } catch (err) {
             messageApi.error(err?.response?.data?.message || 'Login gagal');
         }
@@ -33,48 +34,65 @@ const Login = () => {
     return (
         <>
             {contextHolder}
-            <Form
-                name="loginForm"
-                labelCol={{ span: 6 }}
-                wrapperCol={{ span: 14 }}
-                style={{ maxWidth: 500, margin: '0 auto', marginTop: '5rem' }}
-                initialValues={{ remember: true }}
-                onFinish={onFinish}
-                onFinishFailed={onFinishFailed}
-                autoComplete="off"
+            <div
+                style={{
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    height: '100vh',
+                    background: '#f5f5f5',
+                }}
             >
-                <Form.Item
-                    label="Email"
-                    name="user_email"
-                    rules={[
-                        { required: true, message: 'Masukkan email Anda' },
-                        { type: 'email', message: 'Email tidak valid' }
-                    ]}
+                <Card
+                    style={{ width: 400, padding: '1rem' }}
+                    bordered={false}
+                    hoverable
                 >
-                    <Input />
-                </Form.Item>
+                    <Title level={3} style={{ textAlign: 'center', marginBottom: '2rem' }}>
+                        Aplikasi Pemesanan Kendaraan
+                    </Title>
+                    <Form
+                        name="loginForm"
+                        layout="vertical"
+                        initialValues={{ remember: true }}
+                        onFinish={onFinish}
+                        onFinishFailed={onFinishFailed}
+                        autoComplete="off"
+                    >
+                        <Form.Item
+                            label="Email"
+                            name="user_email"
+                            rules={[
+                                { required: true, message: 'Masukkan email Anda' },
+                                { type: 'email', message: 'Email tidak valid' }
+                            ]}
+                        >
+                            <Input />
+                        </Form.Item>
 
-                <Form.Item
-                    label="Password"
-                    name="user_password"
-                    rules={[
-                        { required: true, message: 'Masukkan password Anda' },
-                        { min: 6, message: 'Password minimal 6 karakter' }
-                    ]}
-                >
-                    <Input.Password />
-                </Form.Item>
+                        <Form.Item
+                            label="Password"
+                            name="user_password"
+                            rules={[
+                                { required: true, message: 'Masukkan password Anda' },
+                                { min: 6, message: 'Password minimal 6 karakter' }
+                            ]}
+                        >
+                            <Input.Password />
+                        </Form.Item>
 
-                <Form.Item name="remember" valuePropName="checked" wrapperCol={{ offset: 6 }}>
-                    <Checkbox>Ingat saya</Checkbox>
-                </Form.Item>
+                        <Form.Item name="remember" valuePropName="checked">
+                            <Checkbox>Ingat saya</Checkbox>
+                        </Form.Item>
 
-                <Form.Item wrapperCol={{ offset: 6 }}>
-                    <Button type="primary" htmlType="submit">
-                        Login
-                    </Button>
-                </Form.Item>
-            </Form>
+                        <Form.Item>
+                            <Button type="primary" htmlType="submit" block>
+                                Login
+                            </Button>
+                        </Form.Item>
+                    </Form>
+                </Card>
+            </div>
         </>
     );
 };

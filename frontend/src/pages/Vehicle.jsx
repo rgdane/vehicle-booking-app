@@ -35,8 +35,6 @@ export default function Vehicle() {
 
     useEffect(() => {
         const init = async () => {
-          //await getCSRF(); // pastikan cookie auth diset dulu
-            console.log(document.cookie)
             fetchVehicle();
         };
         init();

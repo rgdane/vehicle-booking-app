@@ -13,7 +13,7 @@ export default function Header({ collapsed, setCollapsed, title }) {
         } catch (err) {
             console.error('Logout error:', err);
         }
-        localStorage.removeItem('auth');
+        localStorage.removeItem('auth_token');
         navigate('/login'); // ini yang benar
     };
 

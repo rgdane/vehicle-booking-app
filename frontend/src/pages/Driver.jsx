@@ -34,8 +34,6 @@ export default function Driver() {
 
     useEffect(() => {
         const init = async () => {
-          //await getCSRF(); // pastikan cookie auth diset dulu
-            console.log(document.cookie)
             fetchDriver();
         };
         init();

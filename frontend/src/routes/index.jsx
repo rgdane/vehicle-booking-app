@@ -9,7 +9,7 @@ import FirstApproval from "../pages/FirstApproval";
 import SecondApproval from "../pages/SecondApproval";
 
 // Simulasi autentikasi
-// const isAuthenticated = () => !!localStorage.getItem("auth");
+const isAuthenticated = () => !!localStorage.getItem("auth_token");
 
 export const router = createBrowserRouter([
     {
@@ -18,8 +18,7 @@ export const router = createBrowserRouter([
     },
     {
         path: "/",
-        //element: isAuthenticated() ? <DashboardLayout /> : <Navigate to="/login" />,
-        element: <DashboardLayout />,
+        element: isAuthenticated() ? <DashboardLayout /> : <Navigate to="/login" />,
         children: [
         { path: "", element: <Dashboard /> },
         { path: "booking", element: <Booking /> },

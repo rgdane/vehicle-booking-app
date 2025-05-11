@@ -13,15 +13,16 @@ const Login = () => {
     const onFinish = async (values) => {
         try {
             await getCSRF();
-            await api.post('/login', {
+            await api.post('/api/login', {
                 user_email: values.user_email,
                 user_password: values.user_password,
-            }, {
-                withCredentials: true
+            }).then((res) => {
+                console.log('Login response:', res.data); // <- Tambahkan ini
+                const token = res.data.token;
+                localStorage.setItem('auth_token', token); // Simpan token
+                messageApi.success('Login berhasil');
+                navigate('/');
             });
-            messageApi.success('Login berhasil');
-            localStorage.setItem('auth', true);
-            navigate('/');
         } catch (err) {
             messageApi.error(err?.response?.data?.message || 'Login gagal');
         }

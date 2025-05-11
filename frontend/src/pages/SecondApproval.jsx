@@ -35,8 +35,6 @@ export default function SecondApproval() {
 
     useEffect(() => {
         const init = async () => {
-          //await getCSRF(); // pastikan cookie auth diset dulu
-            console.log(document.cookie)
             fetchApproval(2);
         };
         init();

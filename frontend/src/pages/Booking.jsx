@@ -60,8 +60,6 @@ export default function Booking() {
 
     useEffect(() => {
         const init = async () => {
-          //await getCSRF(); // pastikan cookie auth diset dulu
-            //console.log(document.cookie)
             fetchYears();
         };
         init();
@@ -69,7 +67,6 @@ export default function Booking() {
 
     useEffect(() => {
         const months = Array.from({ length: 12 }, (_, i) => i + 1);
-        console.log(months);
         setMonthsData(months);
     }, []);
     

@@ -45,9 +45,20 @@ export default function AddBookingModal({ isModalOpen, setIsModalOpen, fetchBook
         formData.append('booking_start_date', values.booking_start_date.format('YYYY-MM-DD'));
         formData.append('booking_end_date', values.booking_end_date.format('YYYY-MM-DD'));
         formData.append('booking_status', 'Menunggu persetujuan');
-    
+
+        const formApproval = new FormData();
+        formApproval.append('approval_level', 1);
+        formApproval.append('approval_status', 0);
+
         try {
-            await api.post('/api/bookings', formData, {
+            const booking = await api.post('/api/bookings', formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                },
+            });
+            console.log(booking.data.data.booking_id);
+            formApproval.append('booking_id', booking.data.data.booking_id);
+            await api.post('/api/approvals', formApproval, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                 },

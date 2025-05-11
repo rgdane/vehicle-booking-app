@@ -38,4 +38,8 @@ class Booking extends Model
     {
         return $this->belongsTo(Driver::class, 'driver_id', 'driver_id');
     }
+
+    public function approvals() {
+        return $this->hasMany(Approval::class);
+    }
 }

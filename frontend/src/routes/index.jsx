@@ -3,9 +3,9 @@ import DashboardLayout from "../layouts/DashboardLayout";
 import Login from "../pages/Login";
 import Dashboard from "../pages/Dashboard";
 import Booking from "../pages/Booking";
-import Approval from "../pages/Approval";
 import Driver from "../pages/Driver";
 import Vehicle from "../pages/Vehicle";
+import FirstApproval from "../pages/FirstApproval";
 
 // Simulasi autentikasi
 // const isAuthenticated = () => !!localStorage.getItem("auth");
@@ -22,7 +22,7 @@ export const router = createBrowserRouter([
         children: [
         { path: "", element: <Dashboard /> },
         { path: "booking", element: <Booking /> },
-        { path: "approval", element: <Approval /> },
+        { path: "first-approval", element: <FirstApproval /> },
         { path: "driver", element: <Driver /> },
         { path: "vehicle", element: <Vehicle /> },
         ],

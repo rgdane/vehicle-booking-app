@@ -40,8 +40,8 @@ export default function Sidebar({ collapsed }) {
         <Menu.Item key="/booking" icon={<FileDoneOutlined />}>
           <Link to="/booking">Daftar Pemesanan</Link>
         </Menu.Item>
-        <Menu.Item key="/approval" icon={<AuditOutlined />}>
-          <Link to="/approval">Daftar Persetujuan</Link>
+        <Menu.Item key="/first-approval" icon={<AuditOutlined />}>
+          <Link to="/first-approval">Daftar Permohonan</Link>
         </Menu.Item>
         <Menu.Item key="/driver" icon={<UserOutlined />}>
           <Link to="/driver">Daftar Pengemudi</Link>

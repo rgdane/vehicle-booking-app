@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ApprovalController;
 use App\Http\Controllers\BookingController;
 use App\Http\Controllers\DriverController;
 use App\Http\Controllers\VehicleController;
@@ -26,5 +27,8 @@ Route::middleware(['auth:sanctum'])->get('/user', function (Request $request) {
     Route::apiResource('vehicles', VehicleController::class);
     Route::apiResource('drivers', DriverController::class);
     Route::apiResource('bookings', BookingController::class);
+    Route::apiResource('approvals', ApprovalController::class);
+    Route::get('/approvals/level/{level}', [ApprovalController::class, 'indexByLevel']);
+
 
 

@@ -18,7 +18,7 @@ export default function DashboardLayout() {
         const titles = {
             '/': 'Dashboard',
             '/booking': 'Daftar Pemesanan',
-            '/approval': 'Daftar Persetujuan',
+            '/first-approval': 'Daftar Permohonan',
             '/driver': 'Daftar Pengemudi',
         };
 

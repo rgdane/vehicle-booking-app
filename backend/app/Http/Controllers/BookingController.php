@@ -35,7 +35,7 @@ class BookingController extends Controller
 
         return response()->json([
             'message' => 'Booking recorded successfully.',
-            'data' => $booking,
+            'data' => $booking->only(['booking_id']),
         ]);
     }
 

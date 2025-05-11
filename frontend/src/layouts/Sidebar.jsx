@@ -2,6 +2,7 @@ import React from 'react';
 import {
   AuditOutlined,
   BarChartOutlined,
+  CarOutlined,
   FileDoneOutlined,
   HistoryOutlined,
   HomeOutlined,
@@ -44,6 +45,9 @@ export default function Sidebar({ collapsed }) {
         </Menu.Item>
         <Menu.Item key="/driver" icon={<UserOutlined />}>
           <Link to="/driver">Daftar Pengemudi</Link>
+        </Menu.Item>
+        <Menu.Item key="/vehicle" icon={<CarOutlined />}>
+          <Link to="/vehicle">Daftar Kendaraan</Link>
         </Menu.Item>
       </Menu>
     </Sider>

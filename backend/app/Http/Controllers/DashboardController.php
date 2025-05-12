@@ -15,6 +15,7 @@ class DashboardController extends Controller
             DB::raw('count(*) as usage_count')
         )
         ->where('booking_status', 'Disetujui')
+        ->whereNull('deleted_at')
         ->whereYear('bookings.booking_start_date', $year)
         ->groupBy(DB::raw('DATE_FORMAT(bookings.booking_start_date, "%m")'))
         ->orderBy(DB::raw('DATE_FORMAT(bookings.booking_start_date, "%m")'))

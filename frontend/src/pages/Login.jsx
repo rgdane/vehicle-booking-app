@@ -20,6 +20,8 @@ const Login = () => {
                 console.log('Login response:', res.data); // <- Tambahkan ini
                 const token = res.data.token;
                 const role = res.data.user.user_role;
+                const user_id = res.data.user.user_id;
+                localStorage.setItem('user_id', user_id);
                 localStorage.setItem('user_role', role);
                 localStorage.setItem('auth_token', token); // Simpan token
                 messageApi.success('Login berhasil');

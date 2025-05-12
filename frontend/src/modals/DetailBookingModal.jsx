@@ -31,6 +31,11 @@ export default function DetailBookingModal({ isModalOpen, handleCancel, detailDa
             render: (text, record, index) => index + 1,
         },
         {
+            title: 'Penanggung Jawab',
+            dataIndex: ['user','user_fullname'],
+            key: 'user_fullname',
+        },
+        {
             title: 'Level Persetujuan',
             dataIndex: 'approval_level',
             key: 'approval_level',

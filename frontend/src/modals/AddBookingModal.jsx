@@ -36,9 +36,10 @@ export default function AddBookingModal({ isModalOpen, setIsModalOpen, fetchBook
 
     const handleSubmit = async (values) => {
         console.log('Form Values:', values);
+        const user_id = localStorage.getItem('user_id');
     
         const formData = new FormData();
-        formData.append('user_id', 1);
+        formData.append('user_id', user_id);
         formData.append('vehicle_id', values.vehicle_id);
         formData.append('driver_id', values.driver_id);
         formData.append('booking_purpose', values.booking_purpose);

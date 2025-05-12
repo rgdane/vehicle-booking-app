@@ -49,11 +49,12 @@ export default function FirstApproval() {
 
     // Fungsi untuk menyetujui
     const handleApprove = async (record) => {
+        const user_id = localStorage.getItem('user_id');
         const approvedAt = dayjs().format('YYYY-MM-DD HH:mm:ss');
         await api.put(`/api/approvals/${record.approval_id}`, {
             approval_status: 2,
             approved_at: approvedAt,
-            user_id: 5
+            user_id: user_id
         });
 
         await api.put(`/api/bookings/${record.booking_id}`, {
@@ -70,13 +71,14 @@ export default function FirstApproval() {
 
     // Fungsi untuk menolak
     const handleReject = async () => {
+        const user_id = localStorage.getItem('user_id');
         const approvedAt = dayjs().format('YYYY-MM-DD HH:mm:ss');
         if (!approvalNotes) return;
         await api.put(`/api/approvals/${selectedApproval.approval_id}`, {
             approval_status: 1,
             approval_notes: approvalNotes,
             approved_at: approvedAt,
-            user_id: 5
+            user_id: user_id
         });
 
         await api.put(`/api/bookings/${selectedApproval.booking_id}`, {

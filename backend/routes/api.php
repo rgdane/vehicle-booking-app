@@ -49,7 +49,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
         Route::get('/bookings', [BookingController::class, 'indexByFilter']);
     });
     Route::middleware(['auth:sanctum', 'role:direktur_pusat,direktur_cabang'])->group(function () {
-        Route::apiResource('approvals', ApprovalController::class);
+        Route::put('approvals/{id}', [ApprovalController::class, 'update']);
         Route::get('/approvals/level/{level}', [ApprovalController::class, 'indexByLevel']);
     });
 

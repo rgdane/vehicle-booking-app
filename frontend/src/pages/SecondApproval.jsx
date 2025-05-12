@@ -49,7 +49,7 @@ export default function SecondApproval() {
 
     // Fungsi untuk menyetujui
     const handleApprove = async (record) => {
-        const approvedAt = dayjs().format('YYYY-MM-DD');
+        const approvedAt = dayjs().format('YYYY-MM-DD HH:mm:ss');
         await api.put(`/api/approvals/${record.approval_id}`, {
             approval_status: 2,
             approved_at: approvedAt,
@@ -65,7 +65,7 @@ export default function SecondApproval() {
 
     // Fungsi untuk menolak
     const handleReject = async () => {
-        const approvedAt = dayjs().format('YYYY-MM-DD');
+        const approvedAt = dayjs().format('YYYY-MM-DD HH:mm:ss');
         if (!approvalNotes) return;
         await api.put(`/api/approvals/${selectedApproval.approval_id}`, {
             approval_status: 1,

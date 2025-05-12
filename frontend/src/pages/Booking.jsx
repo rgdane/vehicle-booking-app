@@ -4,14 +4,16 @@ import { FileExcelOutlined, PlusOutlined } from '@ant-design/icons';
 import api from '../lib/axios';
 import AddBookingModal from '../modals/AddBookingModal';
 import EditBookingModal from '../modals/EditBookingModal';
-//import getCSRF from '../lib/csrf';
+import DetailBookingModal from '../modals/DetailBookingModal';
 
 export default function Booking() {
     const [data, setData] = useState([]); // state untuk data booking
     const [loading, setLoading] = useState(false); // loading table
     const [isModalOpen, setIsModalOpen] = useState(false); // modal tambah booking
+    const [isDetailModalOpen, setIsDetailModalOpen] = useState(false); // modal tambah booking
     const [isEditModalOpen, setIsEditModalOpen] = useState(false);
     const [editingData, setEditingData] = useState(null);
+    const [detailData, setDetailData] = useState(null);
     const [searchText, setSearchText] = useState('');
     const [yearsData, setYearsData] = useState([]);
     const [monthsData, setMonthsData] = useState([]);
@@ -80,6 +82,11 @@ export default function Booking() {
             console.error('Gagal hapus booking:', error);
             message.error('Gagal hapus booking');
         }
+    };
+
+    const openDetailModal = (id) => {
+        setDetailData(id);
+        setIsDetailModalOpen(true);
     };
 
     const openEditModal = (record) => {
@@ -190,6 +197,7 @@ export default function Booking() {
             key: 'aksi',
             render: (_, record) => (
                 <Space size="middle">
+                    <Button color='cyan' variant='outlined' onClick={() => openDetailModal(record.booking_id)}>Detail</Button>
                     <Button type="primary" onClick={() => openEditModal(record)}>Ubah</Button>
                     <Popconfirm
                         title="Yakin ingin hapus booking ini?"
@@ -252,6 +260,12 @@ export default function Booking() {
             style={{ marginBottom: 16 }}
         />
         <Table columns={columns} dataSource={filteredData} loading={loading} rowKey="booking_id" pagination={{ pageSize: 5 }} />
+
+        <DetailBookingModal
+            isModalOpen={isDetailModalOpen}
+            handleCancel={() => setIsDetailModalOpen(false)}
+            detailData={detailData}
+        />
 
         <AddBookingModal
             isModalOpen={isModalOpen}

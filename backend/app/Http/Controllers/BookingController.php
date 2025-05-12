@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Exports\BookingExport;
+use App\Models\Approval;
 use App\Models\Booking;
 use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
@@ -67,8 +68,10 @@ class BookingController extends Controller
      */
     public function show($id)
     {
-        $booking = Booking::with('user')->findOrFail($id);
-        return response()->json($booking);
+        $approval = Approval::with('user')
+            ->where('booking_id', $id)
+            ->get();
+        return response()->json($approval);
     }
 
     /**

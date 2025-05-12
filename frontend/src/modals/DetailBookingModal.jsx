@@ -34,6 +34,7 @@ export default function DetailBookingModal({ isModalOpen, handleCancel, detailDa
             title: 'Penanggung Jawab',
             dataIndex: ['user','user_fullname'],
             key: 'user_fullname',
+            render: (user) => user ? user : '-',
         },
         {
             title: 'Level Persetujuan',
@@ -58,11 +59,13 @@ export default function DetailBookingModal({ isModalOpen, handleCancel, detailDa
             title: 'Tanggal',
             dataIndex: 'approved_at',
             key: 'approved_at',
+            render: (date) => date ? date : '-',
         },
         {
             title: 'Catatan',
             dataIndex: 'approval_notes',
             key: 'approval_notes',
+            render: (notes) => notes ? notes : '-',
         }
     ];
 
@@ -83,6 +86,7 @@ export default function DetailBookingModal({ isModalOpen, handleCancel, detailDa
                 loading={loading}
                 rowKey="approval_id"
                 pagination={{ pageSize: 2 }}
+                scroll={{ x: 'max-content' }}
             />
         </Modal>
     );

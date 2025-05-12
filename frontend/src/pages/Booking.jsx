@@ -28,9 +28,10 @@ export default function Booking() {
 
     const fetchYears = async () => {
         try {
-            const response = await api.get('/api/years');
+            const response = await api.get('/api/booking-years');
             
             const yearsData = response.data;
+                console.log(yearsData);
                 
             setYearsData(yearsData);
     

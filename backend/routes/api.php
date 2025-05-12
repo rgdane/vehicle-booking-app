@@ -47,6 +47,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
         Route::get('/years', [DashboardController::class, 'getYear']);
         Route::get('/export', [BookingController::class, 'export']);
         Route::get('/bookings', [BookingController::class, 'indexByFilter']);
+        Route::get('/booking-years', [BookingController::class, 'getBookingYear']);
     });
     Route::middleware(['auth:sanctum', 'role:direktur_pusat,direktur_cabang'])->group(function () {
         Route::put('approvals/{id}', [ApprovalController::class, 'update']);

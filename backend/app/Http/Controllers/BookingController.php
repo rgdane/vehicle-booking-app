@@ -6,6 +6,7 @@ use App\Exports\BookingExport;
 use App\Models\Approval;
 use App\Models\Booking;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Facades\Excel;
 
 class BookingController extends Controller
@@ -114,5 +115,15 @@ class BookingController extends Controller
         $year = $request->get('year');
         $month = $request->get('month');
         return Excel::download(new BookingExport($year, $month), 'data-booking.xlsx');
+    }
+
+    public function getBookingYear(){
+        $years = DB::table('bookings')
+            ->selectRaw('YEAR(booking_start_date) as year')
+            ->whereNull('deleted_at')
+            ->distinct()
+            ->orderBy('year', 'desc')
+            ->pluck('year');
+        return $years;
     }
 }
